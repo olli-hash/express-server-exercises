@@ -20,7 +20,7 @@ app.get("/", function(req, res){
 
 app.listen(port, function(){
     
-    console.log(`http://localhost:${port}      http://localhost:${port}/test_server1.html      `)
+    console.log(`http://localhost:${port}      http://localhost:${port}/produce_GET_POST_AJAX.html      `)
     
 })
 
