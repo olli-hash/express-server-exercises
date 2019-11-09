@@ -7,8 +7,28 @@
 <!--    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">-->
     <style>
         body { padding:10px 40px; }
-        .routes_and_url_data { columns: 100px 4;  line-height: 1.6; margin-left: 50px; }
+        .routes_and_url_data { columns: 100px 2;  line-height: 1.6; margin-left: 50px;  border: 1px solid black; border-radius: 8px; }
+        .routes_and_url_data ul {  list-style-type: square;   list-style-position: outside;  }
+        .routes_and_url_data ul li {  height: 2.6em;       }
+        .routes_and_url_data ul li a {  overflow: hidden;        }
     </style>
+    <script type = "text/javascript" src = "https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js">
+    </script>
+    <script>
+        $( document ).ready(function() {
+
+            $('.routes_and_url_data ul li a').each(function(i,e){
+            
+                var x = $(this).attr('href')
+                
+                $(this).html(x)
+            
+            })
+
+        });
+    </script>	
+    
+	
 </head>
 <body>
 
@@ -32,8 +52,8 @@
                 <li><a href="/s/ref=nb_sb_ss_i_0_13?__mk_de_DE=%C5M%C5Z%D5%D1&url=search-alias%3Dcomputers&field-keywords=brother+hl-1430&sprefix=brother+hl-14%2Ccomputers%2C0">link</a></li>
                 <li><a href="/s/ref=nb_sb_noss_1?__mk_de_DE=%C3%85M%C3%85%C5%BD%C3%95%C3%91&url=search-alias%3Daps&field-keywords=GPS-Sender">link</a></li>
                 <li><a href="/OlaRosling/status/1032380013700472832">link</a></li>
-                <li><a href="">link</a></li>
-                <li><a href="">link</a></li>
+               <!-- <li><a href="">link</a></li>
+                <li><a href="">link</a></li>-->
             </ul>
             
             
