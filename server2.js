@@ -2,31 +2,19 @@ const port = process.env.PORT || 8080
 const express = require('express')
 const handlebars = require('express-handlebars')
 const path = require('path')
-
 var app = express()
-router = express.Router()
-
-var logger = require('morgan')
-
-var cookieParser = require('cookie-parser');
-
-
-
+// router = express.Router()
 app.engine('handlebars', handlebars());
 app.set('view engine', 'handlebars');
 
-
-// var path = require('path')
-
-
-router.use(logger())
-router.use(express.static(path.join(__dirname, 'public')))
-router.use(function (req, res) {
-    res.send('Hello')
-})
+var logger = require('morgan')
+app.use(logger('combined'))
 
 
+var cookieParser = require('cookie-parser');
+app.use(cookieParser())
 
+var bodyParser = require('body-parser');
 
 app.use(express.static("served"))               //   kein '/' hier …
 
@@ -60,7 +48,7 @@ app.get('/user/:id', function (req, res, next) {
 
 
 
-
+/*
 function logOriginalUrl (req, res, next) {
     console.log('Request URL:', req.originalUrl)
     next()
@@ -69,28 +57,61 @@ function logOriginalUrl (req, res, next) {
 function logMethod (req, res, next) {
     console.log('Request Type:', req.method)
     next()
-}
-
-var logStuff = [logOriginalUrl, logMethod]    
-
-// trifft nicht '/some_middleware' und nicht '/some_middleware/'    :
-
-app.get('/some_middleware/:id', logStuff, function (req, res, next) {     
-    res.send('User Info')
-})
-
+}*/
 
 
 
 app.get("/", function(req, res){
     
-    res.send("Hallo")
+    // Cookies that have not been signed
+    console.log('Cookies: ', req.cookies)
+    
+    // Cookies that have been signed
+    console.log('Signed Cookies: ', req.signedCookies)
+
+    
+    // const { a, b} = { a: "hey! ", b: "du!"      }
+    
+    res.send("Hallo" + a + b)
 })
 
 
-app.get("/explore_req", function(req,res){
+app.get(/\/explore_req|\/explore_req\/.*/, function(req,res){
     
-    res.send(req)
+    var str = "<h1>" + req.url + "</h1>"
+    
+    //str = str + "<h3>" + req.url.replace(/\//g, ".")  +  "</h3>"
+    
+    var object_path = req.url.split("/")
+    
+    object_path.shift()
+    
+    var obj = req
+    
+    for (var i = 0; i < object_path.length; i++) {
+        
+        if (obj[object_path[i]]) obj = obj[object_path[i]]
+    }
+    
+    
+    var span = "<span style='display:inline-block;width:600px;border:1px solid black;overflow:auto;'>"
+    var span_ = "</span>"
+    
+    for (var i in req) {
+        
+        // href='explore_req' -VS- href='/explore_req' …
+        
+        var i_link = "<a href='/explore_req/" +  i  +  "'>" + i + "</a>"
+        
+        if ( req[i] && req[i].toString) {
+            str = str + i_link + ": " + span + req[i] + span_ + "<br>"
+        } else {
+            str = str + i_link + ": " + span + "----------" + span_ + "<br>"
+        }
+    }
+    
+    res.send(str)
+    //res.send(req)
     
     
 })
