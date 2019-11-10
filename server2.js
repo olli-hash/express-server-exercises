@@ -79,24 +79,15 @@ app.get("/", function(req, res){
 app.get(/\/explore_req|\/explore_req\/.*/, function(req,res){
     
     var str = "<h1>" + req.url + "</h1>"
-    
-    //str = str + "<h3>" + req.url.replace(/\//g, ".")  +  "</h3>"
-    
+        //str = str + "<h3>" + req.url.replace(/\//g, ".")  +  "</h3>"
     var object_path = req.url.split("/")
-    
     object_path.shift()
-    
     var obj = req
-    
     for (var i = 0; i < object_path.length; i++) {
-        
         if (obj[object_path[i]]) obj = obj[object_path[i]]
     }
-    
-    
     var span = "<span style='display:inline-block;width:600px;border:1px solid black;overflow:auto;'>"
     var span_ = "</span>"
-    
     for (var i in req) {
         
         // href='explore_req' -VS- href='/explore_req' …
