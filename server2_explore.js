@@ -4,63 +4,17 @@ const express = require('express')
 const path = require('path')
 var app = express()
 // router = express.Router()
-app.engine('handlebars', handlebars());
-app.set('view engine', 'handlebars');
+// app.engine('handlebars', handlebars());
+// app.set('view engine', 'handlebars');
 
 var logger = require('morgan')
 app.use(logger('combined'))
-
-
 var cookieParser = require('cookie-parser');
 app.use(cookieParser())
-
 var bodyParser = require('body-parser');
 
 app.use(express.static("served"))               //   kein '/' hier …
-
 app.use("/script",express.static("script")) 
-
-//app.use(express.static(path.join(__dirname, 'public')))
-//app.use('/static', express.static(path.join(__dirname, 'public')))
-
-app.use(function (req, res, next) {
-    console.log('Time: %d', Date.now())
-    next()
-})
-
-app.use('/user/:id', function (req, res, next) {
-    console.log('__________________________Request Type:', req.method)
-    next()
-})
-
-app.use('/user/:id', function (req, res, next) {
-    console.log('Request URL:', req.originalUrl)
-    next()
-}, function (req, res, next) {
-    console.log('Request Type:', req.method)
-    next()
-})
-
-app.get('/user/:id', function (req, res, next) {
-    console.log('ID:', req.params.id)
-    next()
-}, function (req, res, next) {
-    res.send('User Info')
-})
-
-
-
-/*
-function logOriginalUrl (req, res, next) {
-    console.log('Request URL:', req.originalUrl)
-    next()
-}
-
-function logMethod (req, res, next) {
-    console.log('Request Type:', req.method)
-    next()
-}*/
-
 
 
 app.get("/", function(req, res){
@@ -71,36 +25,36 @@ app.get("/", function(req, res){
     // Cookies that have been signed
     console.log('Signed Cookies: ', req.signedCookies)
 
-    
-    // const { a, b} = { a: "hey! ", b: "du!"      }
-    
     res.send("Hallo")
 })
 
 var url_history = []
 
-app.get(/\/explore_req|\/explore_req\/.*/, function(req,res){
+app.get(/\/explore_req|\/explore_req\/.*/,   make_handler("req") )
+
+
+function make_handler(o_to_explore) {
     
-    //      explore_req
-    //      /explore_req/_readableState
-    //      /explore_req/_events
-    //      /explore_req/headers
-    //      
-    //      --> req.url
-    
-    
-    
-    
-    
+    return the_explorer
+}
+
+
+
+
+
+
+function the_explorer(req,res){
     
     var aaa = req.url
     var aaai = url_history.indexOf(aaa)
     if (aaai > -1) url_history.splice(aaai,1)
     url_history.unshift(aaa)
     
-    var object_path = aaa.split("/")
-                                            // eine führender "/" produziert hier ein leeres, erstes Element im Array…
+    
+    var object_path = aaa.split("/")        // eine führender "/" produziert hier ein leeres, erstes Element im Array…
     object_path.shift()                     // … wird hier entsorgt.
+    if (object_path[object_path.length - 1] === "") object_path.pop()   // falls die URL auf "/" endete, muss auch das letzte 
+                                                                        // Element entsorgt werden.
     
     var h1_str = ""
     var path=[]
@@ -137,14 +91,8 @@ app.get(/\/explore_req|\/explore_req\/.*/, function(req,res){
     var span_ = "</div>"
     if (typeof obj === 'object') {
         for (var i in obj) {
-                                                                            // die URL enthält immer den aktuellen Object-Path
-            
-            // href='explore_req' -VS- href='/explore_req' …
-            
-            //             "<a href='/explore_req/"
             
             //var i_link = "<a href='" +  i  +  "'>" + i + "</a>"      // ????????????????????????
-            
             var i_link = "<a href='" +  req.url + "/" +  i  +  "'>" + i + "</a>"     
             
             if ( obj[i] && obj[i].toString) {
@@ -158,20 +106,13 @@ app.get(/\/explore_req|\/explore_req\/.*/, function(req,res){
         str = str + span + obj + span_ + "<br>"
     }
     
-    
-    
-    
     res.send(template1(req.url) + str + close_template())
-    //res.send(req)
-    
-    
-})
+}
 
 app.listen(port, function(){
     
     console.log(`http://localhost:${port}      http://localhost:${port}/produce_GET_POST_AJAX.html      `)
-    console.log(`http://localhost:${port}/explore_req    http://localhost:${port}/user/3`)
-    console.log(`http://localhost:${port}/some_middleware    `)
+    console.log(`http://localhost:${port}/explore_req   `)
     
 })
 
@@ -206,14 +147,4 @@ var a=`</body>
 </html>`
 return a
 }
-
-
-
-
-
-
-
-
-
-
 
