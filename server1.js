@@ -8,7 +8,7 @@ router = express.Router()
 
 var logger = require('morgan')
 
-var cookieParser = require('cookie-parser');
+//var cookieParser = require('cookie-parser');
 
 
 
