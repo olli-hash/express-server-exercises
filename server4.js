@@ -5,6 +5,15 @@ app.use(loggingMiddleware)
 
 l = console.log.bind(console)
 
+
+
+
+
+
+
+
+
+
 app.get('/', (req, res) => {
   res.send('Home Page')
   l('got called on root ... Home Page')
@@ -41,10 +50,8 @@ app.get('/tellme', (req, res) => {
 })
 
 function loggingMiddleware(req, res, next) {
-  console.log(`${new Date().toISOString()}: ${req.originalUrl}`) 
+  console.log(`${new Date().toISOString()}: ${req.originalUrl}`)
   next()
 }
 
 app.listen(3000, () => console.log('Server Started'))
-
-
