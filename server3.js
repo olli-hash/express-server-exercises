@@ -9,14 +9,23 @@ app.get('/', (req, res) => {
   res.send('Home Page')
   l('got called on root ... Home Page')
 })
-app.get('/users', (req, res) => {
-  res.send('Users Page')
-  l('got called on /users ... Users Page')
+app.get('/user/:name', (req, res) => {
+  res.send('User Page')
+  l('got called on /user/:name')
+  l('name-Parameter: ' + req.params.name)
 })
-app.get('/a', (req, res) => {
+
+app.get('/user/:name/:team', (req, res) => {
+  res.send('User Team Page')
+  l('got called on /user/:name/:team')
+  l('name-Parameter: ' + req.params.name + ' team-Parameter: ' + req.params.team)
+})
+
+app.get('/a', authorizeUsersAccess, (req, res) => {
   res.send('got called on a')
   l('got called on a')
 })
+
 app.get('/b', (req, res) => {
   res.send('got called on b')
   l('got called on b')
@@ -40,6 +49,13 @@ app.get('/tellme', (req, res) => {
 function loggingMiddleware(req, res, next) {
   console.log(`${new Date().toISOString()}: localhost:3000${req.originalUrl}`)
   next()
+}
+
+function authorizeUsersAccess(req, res, next) {
+  if (req.query.admin === 'true') {
+      next()
+  }
+  else {    res.send('ERROR: You must be an admin')  }
 }
 
 app.listen(3000, () => console.log('Server Started'))
