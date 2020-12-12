@@ -6,15 +6,6 @@ app.use(loggingMiddleware)
 
 l = console.log.bind(console)
 
-
-
-
-
-
-
-
-
-
 app.get('/', (req, res) => {
   res.send('Home Page')
   l('got called on root ... Home Page')
